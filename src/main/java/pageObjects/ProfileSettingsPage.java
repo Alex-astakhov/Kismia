@@ -66,6 +66,8 @@ public class ProfileSettingsPage {
         driver.findElement(password2).clear();
         driver.findElement(password2).sendKeys(pass);
         driver.findElement(saveButton).click();
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.attributeToBe(password, "value", ""));
     }
 
     public void setWomanGender(){

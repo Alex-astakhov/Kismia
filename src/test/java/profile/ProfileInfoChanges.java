@@ -130,12 +130,12 @@ public class ProfileInfoChanges{
     }
 
     @Test(dependsOnMethods = {"login"})
-    public void verifyHeight(){
+    public void verifyHeight() throws InterruptedException {
         driver.get(profilePageUrl);
         ProfilePage profilePage = new ProfilePage(driver);
         profilePage.clickEdit();
         Random random = new Random();
-        int variant = random.nextInt(201) + 50;
+        int variant = random.nextInt(61) + 120;
         profilePage.setHeight(variant);
         profilePage.clickSave();
         Assert.assertEquals(profilePage.getHeight(), variant);

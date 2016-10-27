@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Profile">
+  <test name="profileInfoChanges">
+    <classes>
+      <class name="profile.ProfileInfoChanges">
+        <methods>
+          <exclude name="verifyMaritalStatus"/>
+        </methods>
+      </class>
+    </classes>
+  </test>
+  <test name="profileSettingsChanges">
+    <classes>
+      <class name="profile.ProfileSettingsChange"/>
+    </classes>
+  </test>
+  <test name="profileNotifications">
+    <classes>
+      <class name="profile.ProfileSettingsNotifications"/>
+    </classes>
+  </test>
+  <test name="languageChanges">
+    <classes>
+      <class name="footer.LanguageChanges"/>
+      <class name="footer.LanguageChangesWithLogin"/>
+    </classes>
+  </test>
+  <test name="ueserBehavior">
+    <classes>
+      <class name="behavior.ActionsWithUsers"/>
+    </classes>
+  </test>
+  <test name="registration">
+    <classes>
+      <class name="registration.EmailRegField"/>
+    </classes>
+  </test>
+</suite>

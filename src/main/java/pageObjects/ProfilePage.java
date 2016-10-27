@@ -146,9 +146,11 @@ public class ProfilePage {
         return driver.findElement(religionSelected).getAttribute("value");
     }
 
-    public void setHeight(int height){
+    public void setHeight(int height) throws InterruptedException {
         driver.findElement(this.height).clear();
+        Thread.sleep(3000);
         driver.findElement(this.height).sendKeys(String.valueOf(height));
+        Thread.sleep(3000);
     }
 
     public int getHeight(){
