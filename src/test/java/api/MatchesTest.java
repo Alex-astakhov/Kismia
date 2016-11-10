@@ -1,8 +1,8 @@
 package api;
 
+import core.MethodsFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.message.BasicHeader;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -22,7 +22,7 @@ public class MatchesTest {
         Login login = new Login();
         HttpResponse httpResponse = login.doLogin(email, password);
         Header[] cookieHeaders = httpResponse.getHeaders("Set-Cookie");
-        cookieHeaders = cookieNameSubst(cookieHeaders);
+        cookieHeaders = MethodsFactory.cookieNameSubst(cookieHeaders);
         Matches matches = new Matches();
         Set<Integer> uIds = new HashSet<>();
         for (int i = 0; i < Integer.parseInt(count); i++) {
@@ -30,14 +30,5 @@ public class MatchesTest {
             System.out.println(id);
             Assert.assertTrue(uIds.add(id));
         }
-    }
-
-    private Header[] cookieNameSubst(Header[] cookieHeaders){
-        Header[] newHeader = new Header[cookieHeaders.length];
-        int i = 0;
-        for (Header h: cookieHeaders) {
-            newHeader[i++] = new BasicHeader("Cookie", h.getValue());
-        }
-        return newHeader;
     }
 }
