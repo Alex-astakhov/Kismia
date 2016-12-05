@@ -2,11 +2,28 @@ package core;
 
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.ITestResult;
+import ru.yandex.qatools.allure.annotations.Attachment;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Alex Astakhov on 31.10.2016.
  */
 public class MethodsFactory {
+    public static WebDriver driver;
 
     public static StringBuilder cutStringBuilder(StringBuilder source, String begin, String end){
         int beginIndex = source.indexOf(begin) + begin.length();
@@ -20,12 +37,30 @@ public class MethodsFactory {
         return new StringBuilder(source.substring(beginIndex));
     }
 
-    public static Header[] cookieNameSubst(Header[] cookieHeaders){
-        Header[] newHeader = new Header[cookieHeaders.length];
-        int i = 0;
-        for (Header h: cookieHeaders) {
-            newHeader[i++] = new BasicHeader("Cookie", h.getValue());
+    protected void waitForElement(By by){
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.presenceOfElementLocated(by));
+    }
+
+    @Attachment(value = "{0}", type = "image/png")
+    public static byte[] pngAttachment(){
+        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        try {
+            return Files.readAllBytes(Paths.get(scrFile.getPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return newHeader;
+        return new byte[0];
+    }
+
+    public String getCurrentdateAndTimeString(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+    public void waitForElementEmountIncrease(By by, int emountBefore){
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(by, emountBefore));
     }
 }

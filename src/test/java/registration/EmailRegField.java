@@ -1,5 +1,6 @@
 package registration;
 
+import core.BrowserFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,27 +16,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Alex Astakhov on 26.10.2016.
  */
-public class EmailRegField {
-    WebDriver driver;
+public class EmailRegField extends BrowserFactory {
+
     final String URL = "https://kismia.com/";
 
-    @BeforeTest
-    public void setUpBrowser(){
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-    }
-
-    @AfterTest
-    public void tearDown(){
-        driver.close();
-        driver.quit();
-    }
 
     @Test
     public void startRegistration() throws InterruptedException {
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         driver.get(URL);
         mainPage.registrationFirstStep("Sasha");
     }
@@ -65,7 +53,7 @@ public class EmailRegField {
 
     @Test(dataProvider = "incorrectEmails", dependsOnMethods = "startRegistration")
     public void enterEmails(String email, boolean incorrect) throws InterruptedException {
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         mainPage.typeRegEmail(email);
         mainPage.pressSubmitLast();
         Thread.sleep(1500);

@@ -1,5 +1,6 @@
 package pageObjects;
 
+import core.MethodsFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,8 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /**
  * Created by Alex Astakhov on 13.10.2016.
  */
-public class ProfileSettingsPage {
-    private WebDriver driver;
+public class ProfileSettingsPage extends MethodsFactory {
+
 
     private By name = By.id("settingsName");
     private By birthDate = By.id("settingsBDate");
@@ -34,9 +35,6 @@ public class ProfileSettingsPage {
     private By newVisitorsNotif = By.id("notification_21");
     private By saveNotifButton = By.xpath(".//button[@type='submit']");
 
-    public ProfileSettingsPage(WebDriver driver) {
-        this.driver = driver;
-    }
 
     public void setName(String name){
         driver.findElement(this.name).clear();

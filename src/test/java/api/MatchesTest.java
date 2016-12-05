@@ -17,13 +17,12 @@ import java.util.Set;
  * Created by Alex Astakhov on 10.11.2016.
  */
 public class MatchesTest {
-    HttpResponse httpResponse;
 
     @Test
     @Parameters({"email","password"})
     public void tryLogin(@Optional("bevov@divismail.ru") String email, @Optional("ahtung") String password) throws IOException {
         Login login = new Login();
-        httpResponse = login.doLogin(email, password);
+        HttpResponse httpResponse = login.doLogin(email, password);
         HttpEntity entity = httpResponse.getEntity();
         Assert.assertEquals("", EntityUtils.toString(entity));
     }
@@ -32,7 +31,7 @@ public class MatchesTest {
 
     @Test(dependsOnMethods = "tryLogin")
     @Parameters({"count"})
-    public void nonrecurringMatches(@Optional("50") String count){
+    public void nonrecurringMatches(@Optional("50") String count) throws InterruptedException {
         Matches matches = new Matches();
         Set<Integer> uIds = new HashSet<>();
         for (int i = 0; i < Integer.parseInt(count); i++) {

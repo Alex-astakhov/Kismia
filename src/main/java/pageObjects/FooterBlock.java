@@ -1,13 +1,14 @@
 package pageObjects;
 
+import core.MethodsFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 /**
  * Created by Alex Astakhov on 12.10.2016.
  */
-public class Footer {
-    private WebDriver driver;
+public class FooterBlock extends MethodsFactory {
+
     private By russian = By.xpath(".//a[contains(text(),'Русский')]");
     private By english = By.xpath(".//a[contains(text(),'English')]");
     private By portuges = By.xpath(".//a[contains(text(),'Português')]");
@@ -16,9 +17,7 @@ public class Footer {
     private By checkHeader = By.cssSelector(".head-info h1");
     private By checkRegLink = By.id("form-registration");
 
-    public Footer(WebDriver driver){
-        this.driver = driver;
-    }
+
 
     public void setEnglish(){
         driver.findElement(english).click();

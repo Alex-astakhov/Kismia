@@ -1,7 +1,9 @@
 package profile;
 
+import core.BrowserFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -12,6 +14,7 @@ import pageObjects.Constants;
 import pageObjects.MainPage;
 import pageObjects.ProfilePage;
 
+import javax.swing.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,32 +24,16 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Alex Astakhov on 11.10.2016.
  */
-public class ProfileInfoChanges{
-    WebDriver driver;
+public class ProfileInfoChanges extends BrowserFactory{
+
     String profilePageUrl = Constants.PROFILE_URL;
 
-
-
-
-    @BeforeTest
-    public void setUpBrowser(){
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-    }
-
-    @AfterTest
-    public void tearDown(){
-        driver.close();
-        driver.quit();
-    }
 
 
     @Test
     public void login(){
         driver.get("https://kismia.com");
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         mainPage.login(Constants.EMAIL, Constants.PASSWORD);
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.urlContains("/u"));
@@ -55,7 +42,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyStatus(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         String text = dateFormat.format(date);
@@ -66,7 +53,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyEducation(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(6);
         profilePage.setEducation(variant);
@@ -77,7 +64,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyPosition(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(10);
         profilePage.setPosition(variant);
@@ -88,7 +75,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyFieldOfActivity(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(12);
         profilePage.setFieldOfActivity(variant);
@@ -99,7 +86,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyMaritalStatus(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(12);
         profilePage.setMaritalStatus(variant);
@@ -110,7 +97,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyChildren(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(5);
         profilePage.setChildren(variant);
@@ -121,7 +108,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyReligion(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(9);
         profilePage.setReligion(variant);
@@ -132,7 +119,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyHeight() throws InterruptedException {
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         Random random = new Random();
         int variant = random.nextInt(61) + 120;
@@ -144,7 +131,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyWeight(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         Random random = new Random();
         int variant = random.nextInt(106) + 45;
@@ -156,7 +143,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyBodytype(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(6);
         profilePage.setBodytype(variant);
@@ -167,7 +154,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyHealth(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(5);
         profilePage.setHealth(variant);
@@ -178,7 +165,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyLook(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(7);
         profilePage.setLook(variant);
@@ -189,7 +176,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifySmoking(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(6);
         profilePage.setSmoking(variant);
@@ -200,7 +187,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyDrugs(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(5);
         profilePage.setDrugs(variant);
@@ -211,7 +198,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyAlcohol(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         String variant = profilePage.varGenerator(10);
         profilePage.setAlcohol(variant);
@@ -222,7 +209,7 @@ public class ProfileInfoChanges{
     @Test(dependsOnMethods = {"login"})
     public void verifyLanguage(){
         driver.get(profilePageUrl);
-        ProfilePage profilePage = new ProfilePage(driver);
+        ProfilePage profilePage = new ProfilePage();
         profilePage.clickEdit();
         Random random = new Random();
         String variant = String.valueOf(random.nextInt(20) + 2);

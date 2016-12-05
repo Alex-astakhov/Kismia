@@ -22,8 +22,8 @@
   </test>
   <test name="languageChanges">
     <classes>
-      <class name="footer.LanguageChanges"/>
-      <class name="footer.LanguageChangesWithLogin"/>
+      <class name="footerBlock.LanguageChanges"/>
+      <class name="footerBlock.LanguageChangesWithLogin"/>
     </classes>
   </test>
   <test name="ueserBehavior">

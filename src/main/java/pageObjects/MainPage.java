@@ -1,5 +1,6 @@
 package pageObjects;
 
+import core.MethodsFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,8 +12,8 @@ import java.util.List;
 /**
  * Created by Alex Astakhov on 10.10.2016.
  */
-public class MainPage {
-    private WebDriver driver;
+public class MainPage extends MethodsFactory {
+
 
     private By emailField = By.id("user-email");
     private By passwordField = By.id("user-password");
@@ -30,10 +31,11 @@ public class MainPage {
     private By noPasswordError = By.xpath(".//*[@id='block-last']//*[@class='error-msg no-password']");
     private By incorrectEmailError = By.xpath(".//*[@id='block-last']//*[@class='error-msg incorrect-email']");
 
-    public MainPage(WebDriver driver){
-        this.driver = driver;
-    }
 
+
+    public void waitForThisPage(){
+        waitForElement(emailField);
+    }
 
     public void pressIamBoy(){
         driver.findElement(iAmBoy).click();

@@ -1,5 +1,6 @@
 package pageObjects;
 
+import core.MethodsFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -9,17 +10,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /**
  * Created by Alex Astakhov on 16.10.2016.
  */
-public class MatchesPage {
-    private WebDriver driver;
+public class MatchesPage extends MethodsFactory {
+
 
     private By actions = By.cssSelector(".actions");
     private By blockActions = By.cssSelector(".jsapp-du");
     private By addToFavoriteActions = By.cssSelector(".jsapp-s");
     private By userInfo = By.cssSelector(".msg-in-list .info h2 a");
 
-    public MatchesPage(WebDriver driver) {
-        this.driver = driver;
-    }
 
     public String blockFirstUser(){
         String user = driver.findElement(userInfo).getAttribute("href");

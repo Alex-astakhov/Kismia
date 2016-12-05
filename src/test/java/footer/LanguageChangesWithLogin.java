@@ -1,26 +1,24 @@
 package footer;
 
+import core.BrowserFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import pageObjects.Footer;
+import pageObjects.FooterBlock;
 import pageObjects.MainPage;
-import pageObjects.ProfilePage;
 
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Alex Astakhov on 11.10.2016.
  */
-public class LanguageChangesWithLogin {
-    WebDriver driver;
+public class LanguageChangesWithLogin extends BrowserFactory{
+
     String email = "bevov@divismail.ru";
     String password = "ahtung";
     String englishHeader = "My page";
@@ -30,25 +28,11 @@ public class LanguageChangesWithLogin {
     String franchHeader = "Mon profil";
 
 
-    @BeforeTest
-    public void setUpBrowser(){
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-    }
-
-    @AfterTest
-    public void tearDown(){
-        driver.close();
-        driver.quit();
-    }
-
 
     @Test
     public void login(){
         driver.get("https://kismia.com");
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         mainPage.login(email, password);
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.urlContains("/u"));
@@ -56,42 +40,42 @@ public class LanguageChangesWithLogin {
 
     @Test(dependsOnMethods = {"login"})
     public void verifyEnglish(){
-        Footer footer = new Footer(driver);
-        footer.setEnglish();
-        System.out.println(footer.getHeaderText());
-        Assert.assertTrue(footer.getHeaderText().contains(englishHeader));
+        FooterBlock footerBlock = new FooterBlock();
+        footerBlock.setEnglish();
+        System.out.println(footerBlock.getHeaderText());
+        Assert.assertTrue(footerBlock.getHeaderText().contains(englishHeader));
     }
 
     @Test(dependsOnMethods = {"login"})
     public void verifyRussian(){
-        Footer footer = new Footer(driver);
-        footer.setRussian();
-        System.out.println(footer.getHeaderText());
-        Assert.assertTrue(footer.getHeaderText().contains(russianHeader));
+        FooterBlock footerBlock = new FooterBlock();
+        footerBlock.setRussian();
+        System.out.println(footerBlock.getHeaderText());
+        Assert.assertTrue(footerBlock.getHeaderText().contains(russianHeader));
     }
 
     @Test(dependsOnMethods = {"login"})
     public void verifyPortugal(){
-        Footer footer = new Footer(driver);
-        footer.setPortuges();
-        System.out.println(footer.getHeaderText());
-        Assert.assertTrue(footer.getHeaderText().contains(portugalHeader));
+        FooterBlock footerBlock = new FooterBlock();
+        footerBlock.setPortuges();
+        System.out.println(footerBlock.getHeaderText());
+        Assert.assertTrue(footerBlock.getHeaderText().contains(portugalHeader));
     }
 
     @Test(dependsOnMethods = {"login"})
     public void verifySpanish(){
-        Footer footer = new Footer(driver);
-        footer.setSpanish();
-        System.out.println(footer.getHeaderText());
-        Assert.assertTrue(footer.getHeaderText().contains(spanishHeader));
+        FooterBlock footerBlock = new FooterBlock();
+        footerBlock.setSpanish();
+        System.out.println(footerBlock.getHeaderText());
+        Assert.assertTrue(footerBlock.getHeaderText().contains(spanishHeader));
     }
 
     @Test(dependsOnMethods = {"login"})
     public void verifyFranch(){
-        Footer footer = new Footer(driver);
-        footer.setFranch();
-        System.out.println(footer.getHeaderText());
-        Assert.assertTrue(footer.getHeaderText().contains(franchHeader));
+        FooterBlock footerBlock = new FooterBlock();
+        footerBlock.setFranch();
+        System.out.println(footerBlock.getHeaderText());
+        Assert.assertTrue(footerBlock.getHeaderText().contains(franchHeader));
     }
 
 }

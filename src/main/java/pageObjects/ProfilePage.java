@@ -1,7 +1,9 @@
 package pageObjects;
 
+import core.MethodsFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,8 +13,8 @@ import java.util.Random;
 /**
  * Created by Alex Astakhov on 11.10.2016.
  */
-public class ProfilePage {
-    private WebDriver driver;
+public class ProfilePage extends MethodsFactory {
+
 
     private By userName = By.cssSelector(".inform-col strong");
     private By status = By.xpath(".//*[contains(@class, 'status-box show')]//span");
@@ -49,12 +51,11 @@ public class ProfilePage {
     private By alcoholSelected = By.xpath(".//*[@name='alcohol']/*[@selected]");
     private String languageId = "#foreign_languages_";
     private By infoPanel = By.cssSelector(".striped");
+    private By exitProfileLink = By.cssSelector("[href*=sign]");
+
+    Actions action;
 
 
-
-    public ProfilePage(WebDriver driver){
-        this.driver = driver;
-    }
 
     public String varGenerator(int count){
         Random random = new Random();
@@ -92,6 +93,12 @@ public class ProfilePage {
         driver.findElement(statusFieldActive).clear();
         driver.findElement(statusFieldActive).sendKeys(text);
         driver.findElement(statusSave).click();
+    }
+
+    public void logOut(){
+        driver.findElement(exitProfileLink).click();
+        MainPage mainPage = new MainPage();
+        mainPage.waitForThisPage();
     }
 
     public String getStatus(){
@@ -146,11 +153,9 @@ public class ProfilePage {
         return driver.findElement(religionSelected).getAttribute("value");
     }
 
-    public void setHeight(int height) throws InterruptedException {
-        driver.findElement(this.height).clear();
-        Thread.sleep(3000);
+    public void setHeight(int height) {
+        action.doubleClick(driver.findElement(this.height)).perform();
         driver.findElement(this.height).sendKeys(String.valueOf(height));
-        Thread.sleep(3000);
     }
 
     public int getHeight(){
@@ -159,7 +164,7 @@ public class ProfilePage {
     }
 
     public void setWeight(int weight){
-        driver.findElement(this.weight).clear();
+        action.doubleClick(driver.findElement(this.weight)).perform();
         driver.findElement(this.weight).sendKeys(String.valueOf(weight));
     }
 

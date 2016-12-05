@@ -1,5 +1,6 @@
 package profile;
 
+import core.BrowserFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,28 +18,15 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Alex Astakhov on 15.10.2016.
  */
-public class ProfileSettingsNotifications {
-    WebDriver driver;
+public class ProfileSettingsNotifications extends BrowserFactory {
+
     String notifUrl = Constants.NOTIFICATIONS_SETTINGS_URL;
 
-    @BeforeTest
-    public void setUpBrowser(){
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-    }
-
-    @AfterTest
-    public void tearDown(){
-        driver.close();
-        driver.quit();
-    }
 
     @Test
     public void login(){
         driver.get("https://kismia.com");
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage();
         mainPage.login(Constants.EMAIL, Constants.PASSWORD);
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.urlContains("/u"));
@@ -47,7 +35,7 @@ public class ProfileSettingsNotifications {
     @Test(dependsOnMethods = {"login"})
     public void verifyNewGiftNotif() {
         driver.get(notifUrl);
-        ProfileSettingsPage profileSet = new ProfileSettingsPage(driver);
+        ProfileSettingsPage profileSet = new ProfileSettingsPage();
         profileSet.setNewGiftNotif();
         Assert.assertFalse(profileSet.newGiftIsChecked());
         profileSet.setNewGiftNotif();
@@ -57,7 +45,7 @@ public class ProfileSettingsNotifications {
     @Test(dependsOnMethods = {"login"})
     public void verifyYouLikedNotif() {
         driver.get(notifUrl);
-        ProfileSettingsPage profileSet = new ProfileSettingsPage(driver);
+        ProfileSettingsPage profileSet = new ProfileSettingsPage();
         profileSet.setYouLikedNotif();
         Assert.assertFalse(profileSet.youLikedChecked());
         profileSet.setYouLikedNotif();
@@ -67,7 +55,7 @@ public class ProfileSettingsNotifications {
     @Test(dependsOnMethods = {"login"})
     public void verifyNewMatchesNotif() {
         driver.get(notifUrl);
-        ProfileSettingsPage profileSet = new ProfileSettingsPage(driver);
+        ProfileSettingsPage profileSet = new ProfileSettingsPage();
         profileSet.setNewMatchesNotif();
         Assert.assertFalse(profileSet.newMatchesChecked());
         profileSet.setNewMatchesNotif();
@@ -77,7 +65,7 @@ public class ProfileSettingsNotifications {
     @Test(dependsOnMethods = {"login"})
     public void verifyNewMessagesNotif() {
         driver.get(notifUrl);
-        ProfileSettingsPage profileSet = new ProfileSettingsPage(driver);
+        ProfileSettingsPage profileSet = new ProfileSettingsPage();
         profileSet.setNewMessagesNotif();
         Assert.assertFalse(profileSet.newMessagesChecked());
         profileSet.setNewMessagesNotif();
@@ -87,7 +75,7 @@ public class ProfileSettingsNotifications {
     @Test(dependsOnMethods = {"login"})
     public void verifyPremiumPurchaseNotif() {
         driver.get(notifUrl);
-        ProfileSettingsPage profileSet = new ProfileSettingsPage(driver);
+        ProfileSettingsPage profileSet = new ProfileSettingsPage();
         profileSet.setPremiumPurchaseNotif();
         Assert.assertFalse(profileSet.premiumPurchaseChecked());
         profileSet.setPremiumPurchaseNotif();
@@ -97,7 +85,7 @@ public class ProfileSettingsNotifications {
     @Test(dependsOnMethods = {"login"})
     public void verifyNewAppropriateNotif() {
         driver.get(notifUrl);
-        ProfileSettingsPage profileSet = new ProfileSettingsPage(driver);
+        ProfileSettingsPage profileSet = new ProfileSettingsPage();
         profileSet.setNewAppropriateNotif();
         Assert.assertFalse(profileSet.newAppropriateChecked());
         profileSet.setNewAppropriateNotif();
@@ -107,7 +95,7 @@ public class ProfileSettingsNotifications {
     @Test(dependsOnMethods = {"login"})
     public void verifyNewVisitorsNotif() {
         driver.get(notifUrl);
-        ProfileSettingsPage profileSet = new ProfileSettingsPage(driver);
+        ProfileSettingsPage profileSet = new ProfileSettingsPage();
         profileSet.setNewVisitorsNotif();
         Assert.assertFalse(profileSet.newVisitorsChecked());
         profileSet.setNewVisitorsNotif();
