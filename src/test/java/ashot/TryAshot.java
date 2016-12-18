@@ -4,6 +4,7 @@ import api.models.User;
 import core.BrowserFactory;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
@@ -12,24 +13,17 @@ import java.util.Set;
 /**
  * Created by Alex Astakhov on 17.12.2016.
  */
+@Listeners()
 public class TryAshot extends BrowserFactory {
 
 
     @Test
-    public void makeScreenshot(){
+    public void compareScreenshots(){
         driver.get("https://kismia.com/");
         core.TryAshot ashot = new core.TryAshot(".\\screenshots");
         Set<By> ignore = new HashSet<>();
-        ashot.takeExpectedScreenshot(ignore);
-    }
-
-    @Test
-    public void compareScreenshots(){
-        driver.get("https://kismia.com/#registration");
-        core.TryAshot ashot = new core.TryAshot(".\\screenshots");
-        Set<By> ignore = new HashSet<>();
         ashot.takeActualScreenshot(ignore);
-        Assert.assertEquals(ashot.findImageDifference().getDiffSize(), 0);
+        Assert.assertTrue(ashot.findImageDifference().getDiffSize() <= 200, "Difference is more then 200");
     }
 
     @Test

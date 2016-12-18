@@ -13,6 +13,7 @@ import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -57,12 +58,21 @@ public class TryAshot extends MethodsFactory {
 
         Screenshot screenshot = new AShot().ignoredElements(ignoredElements).shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(driver);
 
-        File actualFile = new File(actualDir+"kismia"+".png");
+        File actualFile = new File(actualDir+getScreenshotName()+".png");
+        File expectedFile = new File(expectedDir+getScreenshotName()+".png");
+
         try {
-            ImageIO.write(screenshot.getImage(), "png", actualFile);
+            if (!expectedFile.exists()) {
+                ImageIO.write(screenshot.getImage(), "png", expectedFile);
+                ImageIO.write(screenshot.getImage(), "png", actualFile);
+            }
+            else {
+                ImageIO.write(screenshot.getImage(), "png", actualFile);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public void takeExpectedScreenshot(Set<By> ignoredElements){
@@ -76,7 +86,7 @@ public class TryAshot extends MethodsFactory {
 
         Screenshot screenshot = new AShot().ignoredElements(ignoredElements).shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(driver);
 
-        File actualFile = new File(expectedDir+"kismia"+".png");
+        File actualFile = new File(expectedDir+getScreenshotName()+".png");
         try {
             ImageIO.write(screenshot.getImage(), "png", actualFile);
         } catch (IOException e) {
@@ -87,7 +97,7 @@ public class TryAshot extends MethodsFactory {
     public Screenshot getExpectedScreenshot(){
 
         try {
-            return new Screenshot(ImageIO.read(new File(expectedDir+"kismia"+".png")));
+            return new Screenshot(ImageIO.read(new File(expectedDir+getScreenshotName()+".png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,7 +107,7 @@ public class TryAshot extends MethodsFactory {
     public Screenshot getActualScreenshot(){
 
         try {
-            return new Screenshot(ImageIO.read(new File(actualDir+"kismia"+".png")));
+            return new Screenshot(ImageIO.read(new File(actualDir+getScreenshotName()+".png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,13 +119,24 @@ public class TryAshot extends MethodsFactory {
         Screenshot expected = getExpectedScreenshot();
         ImageDiff diff = new ImageDiffer().makeDiff(expected, actual);
         if (diff.getDiffSize() > 0){
-            File diffFile = new File(markedImages+"kismia"+".png");
+            File diffFile = new File(markedImages+getScreenshotName()+".png");
+            File actualFile = new File( actualDir + getScreenshotName()+".png");
+            File expectedFile = new File(expectedDir + getScreenshotName()+".png");
             try {
                 ImageIO.write(diff.getMarkedImage(), "png", diffFile);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            /*pngAttachment(actual, "actualScreenshot");
+            pngAttachment(expected, "expectedScreenshot");*/
+
+
+            pngAttachment(actualFile);
+
+
+            pngAttachment(expectedFile);
+            pngAttachment(diffFile);
         }
         return diff;
     }
@@ -125,6 +146,28 @@ public class TryAshot extends MethodsFactory {
         return "screen_" + driver.getCurrentUrl().substring(18).replace("/", "_") + driver.manage().window().getSize();
     }
 
+    @Attachment(value = "{0}", type = "image/png")
+    public static byte[] pngAttachment(Screenshot screenshot, String name){
+        try {
+            File file = new File(name + ".png");
+            ImageIO.write(screenshot.getImage(), "png", file);
+            return Files.readAllBytes(Paths.get(file.getPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new byte[0];
+    }
+
+    @Attachment(value = "{0}", type = "image/png")
+    public static byte[] pngAttachment(File file){
+        try {
+
+            return Files.readAllBytes(Paths.get(file.getPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new byte[0];
+    }
 
 
 }
