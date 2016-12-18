@@ -49,7 +49,7 @@ public class TryAshot extends MethodsFactory {
 
 
 
-    public void takeActualScreenshot(Set<By> ignoredElements){
+    private void takeActualScreenshot(Set<By> ignoredElements){
         Robot bot = null;
         try {
             bot = new Robot();
@@ -77,24 +77,6 @@ public class TryAshot extends MethodsFactory {
 
     }
 
-    public void takeExpectedScreenshot(Set<By> ignoredElements){
-        Robot bot = null;
-        try {
-            bot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
-        bot.mouseMove(0, 0);
-
-        Screenshot screenshot = new AShot().ignoredElements(ignoredElements).shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(driver);
-
-        File actualFile = new File(expectedDir+getScreenshotName()+".png");
-        try {
-            ImageIO.write(screenshot.getImage(), "png", actualFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public Screenshot getExpectedScreenshot(){
 
@@ -104,6 +86,11 @@ public class TryAshot extends MethodsFactory {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private boolean expectedIsPresent(){
+        File file = new File(expectedDir+getScreenshotName()+".png");
+        return file.exists();
     }
 
     public Screenshot getActualScreenshot(){
@@ -116,13 +103,46 @@ public class TryAshot extends MethodsFactory {
         return null;
     }
 
-    public ImageDiff findImageDifference(){
-        Screenshot actual = getActualScreenshot();
-        Screenshot expected = getExpectedScreenshot();
+    private Screenshot takeScreenshot(Set<By> setIgnoredElements){
+        Robot bot = null;
+        try {
+            bot = new Robot();
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+        bot.mouseMove(0, 0);
+
+        return new AShot().ignoredElements(setIgnoredElements).shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(driver);
+
+    }
+
+
+    public ImageDiff findImageDifference(Set<By> setIgnoredElements){
+
+        Screenshot actual = takeScreenshot(setIgnoredElements);
+        File actualFile = new File( actualDir + getScreenshotName()+".png");
+        Screenshot expected = null;
+        try {
+            ImageIO.write(actual.getImage(), "png", actualFile);
+
+
+        if (expectedIsPresent()) {
+            expected = getExpectedScreenshot();
+        }
+        else {
+            expected = takeScreenshot(setIgnoredElements);
+            File expectedFile = new File(expectedDir + getScreenshotName()+".png");
+            ImageIO.write(expected.getImage(), "png", expectedFile);
+
+        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        expected.setIgnoredAreas(actual.getIgnoredAreas());
         ImageDiff diff = new ImageDiffer().makeDiff(expected, actual);
         if (diff.getDiffSize() > 0){
             File diffFile = new File(markedImages+getScreenshotName()+".png");
-            File actualFile = new File( actualDir + getScreenshotName()+".png");
+            actualFile = new File( actualDir + getScreenshotName()+".png");
             File expectedFile = new File(expectedDir + getScreenshotName()+".png");
             try {
                 ImageIO.write(diff.getMarkedImage(), "png", diffFile);

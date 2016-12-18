@@ -16,14 +16,24 @@ import java.util.Set;
 @Listeners()
 public class TryAshot extends BrowserFactory {
 
+    By email = By.id("user-email");
+    By pass = By.id("user-password");
+    By formInput = By.cssSelector("form-input");
+
+
 
     @Test
     public void compareScreenshots(){
         driver.get("https://kismia.com/");
+        driver.findElement(email).sendKeys("XXXXXXXXXXXXXXXXXX");
+        driver.findElement(pass).sendKeys("XXXXXXXXXXXXXXXXXX");
         core.TryAshot ashot = new core.TryAshot(".\\screenshots");
         Set<By> ignore = new HashSet<>();
-        ashot.takeActualScreenshot(ignore);
-        Assert.assertTrue(ashot.findImageDifference().getDiffSize() <= 200, "Difference is more then 200");
+        ignore.add(email);
+        ignore.add(pass);
+        //ignore.add(formInput);
+        int difference = ashot.findImageDifference(ignore).getDiffSize();
+        Assert.assertTrue( difference <= 500, "Difference is more then 500 - (" + difference + ")");
     }
 
     @Test
