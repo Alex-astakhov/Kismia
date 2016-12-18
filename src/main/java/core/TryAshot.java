@@ -1,8 +1,10 @@
 package core;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.ScreenshotException;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.ashot.AShot;
@@ -143,7 +145,10 @@ public class TryAshot extends MethodsFactory {
 
 
     private String getScreenshotName(){
-        return "screen_" + driver.getCurrentUrl().substring(18).replace("/", "_") + driver.manage().window().getSize();
+        Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+        String browserName = cap.getBrowserName().toLowerCase();
+        return "screen_" + driver.getCurrentUrl().substring(18).replace("/", "_")
+                + browserName + "_" + driver.manage().window().getSize();
     }
 
     @Attachment(value = "{0}", type = "image/png")
