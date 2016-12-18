@@ -48,36 +48,6 @@ public class TryAshot extends MethodsFactory {
 
 
 
-
-    private void takeActualScreenshot(Set<By> ignoredElements){
-        Robot bot = null;
-        try {
-            bot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
-        bot.mouseMove(0, 0);
-
-        Screenshot screenshot = new AShot().ignoredElements(ignoredElements).shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(driver);
-
-        File actualFile = new File(actualDir+getScreenshotName()+".png");
-        File expectedFile = new File(expectedDir+getScreenshotName()+".png");
-
-        try {
-            if (!expectedFile.exists()) {
-                ImageIO.write(screenshot.getImage(), "png", expectedFile);
-                ImageIO.write(screenshot.getImage(), "png", actualFile);
-            }
-            else {
-                ImageIO.write(screenshot.getImage(), "png", actualFile);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
     public Screenshot getExpectedScreenshot(){
 
         try {
@@ -119,8 +89,10 @@ public class TryAshot extends MethodsFactory {
 
     public ImageDiff findImageDifference(Set<By> setIgnoredElements){
 
-        Screenshot actual = takeScreenshot(setIgnoredElements);
+
         File actualFile = new File( actualDir + getScreenshotName()+".png");
+        File expectedFile = new File(expectedDir + getScreenshotName()+".png");
+        Screenshot actual = takeScreenshot(setIgnoredElements);
         Screenshot expected = null;
         try {
             ImageIO.write(actual.getImage(), "png", actualFile);
@@ -131,7 +103,6 @@ public class TryAshot extends MethodsFactory {
         }
         else {
             expected = takeScreenshot(setIgnoredElements);
-            File expectedFile = new File(expectedDir + getScreenshotName()+".png");
             ImageIO.write(expected.getImage(), "png", expectedFile);
 
         }
@@ -143,16 +114,12 @@ public class TryAshot extends MethodsFactory {
         if (diff.getDiffSize() > 0){
             File diffFile = new File(markedImages+getScreenshotName()+".png");
             actualFile = new File( actualDir + getScreenshotName()+".png");
-            File expectedFile = new File(expectedDir + getScreenshotName()+".png");
             try {
                 ImageIO.write(diff.getMarkedImage(), "png", diffFile);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            /*pngAttachment(actual, "actualScreenshot");
-            pngAttachment(expected, "expectedScreenshot");*/
-
 
             pngAttachment(actualFile);
 
