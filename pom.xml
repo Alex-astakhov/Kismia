@@ -141,7 +141,15 @@
             <version>1.13.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Yandex AShot -->
+        <dependency>
+            <groupId>ru.yandex.qatools.ashot</groupId>
+            <artifactId>ashot</artifactId>
+            <version>1.5.2</version>
+        </dependency>
     </dependencies>
+
 
 
 </project>
